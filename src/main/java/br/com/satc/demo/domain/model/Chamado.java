@@ -14,7 +14,8 @@ import java.util.Objects;
 public class Chamado implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false, length = 140)
@@ -29,7 +30,7 @@ public class Chamado implements Serializable {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 20)
-    private Status status = Status.ATIVO;
+    private Status status = Status.ABERTO;
 
     @CreationTimestamp
     @Column(updatable = false)
@@ -53,13 +54,12 @@ public class Chamado implements Serializable {
                    Status status, Cliente cliente, Tecnico tecnico) {
         this.titulo = titulo;
         this.descricao = descricao;
-        this.prioridade = prioridade;
-        this.status = status;
+        this.prioridade = prioridade != null ? prioridade : Prioridade.MEDIA;
+        this.status = status != null ? status : Status.ABERTO;
         this.cliente = cliente;
         this.tecnico = tecnico;
     }
 
-    // getters/setters
     public Long getId() { return id; }
 
     public String getTitulo() { return titulo; }
@@ -75,6 +75,7 @@ public class Chamado implements Serializable {
     public void setStatus(Status status) { this.status = status; }
 
     public Instant getAbertoEm() { return abertoEm; }
+
     public Instant getFechadoEm() { return fechadoEm; }
     public void setFechadoEm(Instant fechadoEm) { this.fechadoEm = fechadoEm; }
 
@@ -84,15 +85,19 @@ public class Chamado implements Serializable {
     public Tecnico getTecnico() { return tecnico; }
     public void setTecnico(Tecnico tecnico) { this.tecnico = tecnico; }
 
-    @Override public boolean equals(Object o) {
+    @Override
+    public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Chamado)) return false;
         Chamado chamado = (Chamado) o;
         return Objects.equals(id, chamado.id);
     }
-    @Override public int hashCode() { return Objects.hash(id); }
 
-    @Override public String toString() {
+    @Override
+    public int hashCode() { return Objects.hash(id); }
+
+    @Override
+    public String toString() {
         return "Chamado{id=" + id + ", titulo='" + titulo + "'}";
     }
 }

@@ -1,25 +1,24 @@
 package br.com.satc.demo.web.dto;
 
 import br.com.satc.demo.domain.enums.Perfil;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
+import org.hibernate.validator.constraints.br.CPF;
 
 public record TecnicoDTO(
         Long id,
 
-        @NotBlank(message = "Nome é obrigatório")
-        @Size(min = 3, max = 120, message = "Nome deve ter entre 3 e 120 caracteres")
+        @NotBlank @Size(min = 3, max = 120)
         String nome,
 
-        @NotBlank(message = "E-mail é obrigatório")
-        @Email(message = "E-mail inválido")
+        @NotBlank @Email
         String email,
 
-        @NotNull(message = "Perfil é obrigatório")
+        @NotBlank @CPF
+        String cpf,
+
+        @NotNull
         Perfil perfil,
 
-        @Size(max = 120, message = "Especialidade deve ter no máximo 120 caracteres")
+        @Size(max = 120)
         String especialidade
 ) {}
